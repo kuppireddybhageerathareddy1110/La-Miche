@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Miche — Artisan Bakery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,400;0,9..144,700;1,9..144,200;1,9..144,400&family=Instrument+Sans:wght@300;400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1A120B;
+  --ink2:#3D2B1F;
+  --ink3:#6B4A36;
+  --terra:#BF5A2F;
+  --terra2:#D97A50;
+  --terra3:#F0B090;
+  --gold:#C8962A;
+  --gold2:#E8BE6A;
+  --cream:#FAF5EC;
+  --cream2:#F3EAD8;
+  --cream3:#E8DCCA;
+  --sage:#6B7C5A;
+  --sage2:#A5B894;
+  --white:#FDFAF6;
+  --muted:#9A806A;
+  --border:rgba(26,18,11,0.1);
+  --ff-display:'Fraunces',serif;
+  --ff-serif:'Libre Baskerville',serif;
+  --ff-sans:'Instrument Sans',sans-serif;
+  --ease-out:cubic-bezier(0.22,1,0.36,1);
+}
+html{scroll-behavior:smooth;cursor:none}
+body{font-family:var(--ff-sans);background:var(--white);color:var(--ink);overflow-x:hidden;font-weight:300}
+
+/* CURSOR */
+#cursor{position:fixed;width:12px;height:12px;background:var(--terra);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;mix-blend-mode:multiply}
+#cursor-ring{position:fixed;width:40px;height:40px;border:1px solid rgba(191,90,47,0.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .08s,width .3s,height .3s,border-color .3s}
+body:hover #cursor{opacity:1}
+
+/* NAVBAR */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;mix-blend-mode:normal}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:76px;transition:all .4s}
+nav.solid .nav-inner{background:rgba(253,250,246,.96);backdrop-filter:blur(16px);box-shadow:0 1px 0 var(--border)}
+.logo{font-family:var(--ff-display);font-size:26px;font-weight:200;color:var(--white);text-decoration:none;letter-spacing:.04em;transition:color .3s}
+.logo em{font-style:italic;color:var(--terra3)}
+nav.solid .logo{color:var(--ink)}
+nav.solid .logo em{color:var(--terra)}
+.nav-center{display:flex;gap:32px;list-style:none}
+.nav-center a{font-size:12px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.7);text-decoration:none;transition:color .3s;position:relative}
+.nav-center a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:var(--terra3);transform:scaleX(0);transition:transform .3s}
+.nav-center a:hover{color:white}
+.nav-center a:hover::after{transform:scaleX(1)}
+nav.solid .nav-center a{color:var(--muted)}
+nav.solid .nav-center a:hover{color:var(--terra)}
+nav.solid .nav-center a::after{background:var(--terra)}
+.nav-right{display:flex;align-items:center;gap:16px}
+.cart-pill{display:flex;align-items:center;gap:8px;padding:9px 20px;border:1px solid rgba(255,255,255,.3);border-radius:100px;color:rgba(255,255,255,.85);font-size:12px;font-weight:400;letter-spacing:.08em;cursor:pointer;background:rgba(255,255,255,.08);backdrop-filter:blur(8px);transition:all .3s}
+.cart-pill:hover{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.6)}
+nav.solid .cart-pill{border-color:var(--border);color:var(--ink2);background:transparent}
+nav.solid .cart-pill:hover{background:var(--cream);border-color:var(--terra)}
+.cart-pill-count{background:var(--terra);color:white;font-size:10px;width:18px;height:18px;border-radius:50%;display:none;align-items:center;justify-content:center}
+
+/* HERO — IMMERSIVE */
+.hero{height:100vh;min-height:720px;position:relative;display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-canvas{position:absolute;inset:0}
+.hero-left{position:relative;z-index:2;display:flex;flex-direction:column;justify-content:center;padding:120px 48px 80px 80px}
+.hero-right{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;padding:80px 48px 80px 0}
+.hero-kicker{display:flex;align-items:center;gap:12px;margin-bottom:32px;opacity:0;animation:fadeUp .8s var(--ease-out) .2s forwards}
+.hero-kicker-line{width:32px;height:1px;background:rgba(255,255,255,.5)}
+.hero-kicker-text{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.6);font-weight:400}
+.hero-h1{font-family:var(--ff-display);font-size:96px;font-weight:200;color:white;line-height:.9;letter-spacing:-.02em;opacity:0;animation:fadeUp .9s var(--ease-out) .35s forwards}
+.hero-h1 em{font-style:italic;color:var(--terra3)}
+.hero-sub{font-size:16px;line-height:1.8;color:rgba(255,255,255,.6);max-width:380px;margin:28px 0 48px;font-weight:300;opacity:0;animation:fadeUp .8s var(--ease-out) .5s forwards}
+.hero-btns{display:flex;gap:16px;opacity:0;animation:fadeUp .8s var(--ease-out) .65s forwards}
+.btn-hero{display:inline-flex;align-items:center;gap:10px;padding:14px 32px;font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;border-radius:100px;text-decoration:none;transition:all .3s}
+.btn-hero-fill{background:var(--terra);color:white;border:1px solid var(--terra)}
+.btn-hero-fill:hover{background:var(--terra2);transform:translateY(-2px);box-shadow:0 12px 32px rgba(191,90,47,.35)}
+.btn-hero-ghost{background:rgba(255,255,255,.1);color:white;border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(8px)}
+.btn-hero-ghost:hover{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.6)}
+.hero-stats-row{display:flex;gap:40px;margin-top:60px;padding-top:40px;border-top:1px solid rgba(255,255,255,.12);opacity:0;animation:fadeUp .8s var(--ease-out) .8s forwards}
+.hero-stat-n{font-family:var(--ff-display);font-size:40px;font-weight:200;color:white;line-height:1;display:block}
+.hero-stat-l{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);display:block;margin-top:4px}
+.hero-visual{width:100%;max-width:520px;position:relative}
+.hero-img-main{width:100%;aspect-ratio:3/4;border-radius:12px;overflow:hidden;position:relative;opacity:0;animation:heroImg .9s var(--ease-out) .5s forwards}
+.hero-img-float{position:absolute;bottom:-20px;left:-40px;width:180px;aspect-ratio:1;border-radius:12px;overflow:hidden;border:4px solid var(--white);box-shadow:0 20px 60px rgba(0,0,0,.25);opacity:0;animation:heroImg .8s var(--ease-out) .85s forwards}
+.hero-badge-wrap{position:absolute;top:24px;right:-20px;opacity:0;animation:heroImg .8s var(--ease-out) 1s forwards}
+.hero-badge{background:white;border-radius:50%;width:110px;height:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 16px 48px rgba(0,0,0,.2);text-align:center}
+.hero-badge-n{font-family:var(--ff-display);font-size:26px;font-weight:400;color:var(--terra);line-height:1}
+.hero-badge-s{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.hero-scroll{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,.4);font-size:10px;letter-spacing:.14em;text-transform:uppercase;z-index:3;opacity:0;animation:fadeUp .6s var(--ease-out) 1.2s forwards}
+.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,rgba(255,255,255,.4),transparent);animation:scrollPulse 2s ease-in-out infinite}
+@keyframes scrollPulse{0%,100%{transform:scaleY(1);opacity:.4}50%{transform:scaleY(1.3);opacity:.8}}
+
+/* TICKER */
+.ticker{background:var(--terra);padding:13px 0;overflow:hidden}
+.ticker-track{display:flex;animation:ticker 30s linear infinite;white-space:nowrap}
+.ticker-item{display:inline-flex;align-items:center;gap:16px;padding:0 24px;font-family:var(--ff-display);font-size:14px;font-weight:200;color:rgba(255,255,255,.8);font-style:italic;flex-shrink:0}
+.ticker-gem{color:var(--gold2);font-size:10px;flex-shrink:0}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ABOUT — EDITORIAL SPLIT */
+.about{padding:120px 0;background:var(--cream);position:relative;overflow:hidden}
+.about-watermark{position:absolute;right:-40px;top:50%;transform:translateY(-50%) rotate(90deg);font-family:var(--ff-display);font-size:160px;font-weight:200;color:rgba(191,90,47,.05);letter-spacing:.05em;pointer-events:none;white-space:nowrap;font-style:italic}
+.about-grid{display:grid;grid-template-columns:5fr 7fr;gap:100px;align-items:center}
+.about-media{position:relative}
+.about-media-frame{position:relative}
+.about-img-tall{width:100%;aspect-ratio:3/4;border-radius:8px;overflow:hidden;position:relative}
+.about-img-accent{position:absolute;bottom:-32px;right:-32px;width:55%;aspect-ratio:1;border-radius:8px;overflow:hidden;border:6px solid var(--cream);box-shadow:0 24px 64px rgba(0,0,0,.12)}
+.about-corner-decor{position:absolute;top:20px;left:20px;width:60px;height:60px;border-top:2px solid var(--terra);border-left:2px solid var(--terra);border-radius:2px;opacity:.5;pointer-events:none}
+.about-text{padding-right:20px}
+.section-kicker{display:inline-flex;align-items:center;gap:10px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--terra);font-weight:500;margin-bottom:20px}
+.section-kicker::before{content:'';width:24px;height:1px;background:var(--terra)}
+.about-title{font-family:var(--ff-display);font-size:60px;font-weight:200;color:var(--ink);line-height:1;letter-spacing:-.02em;margin-bottom:28px}
+.about-title em{font-style:italic;color:var(--terra)}
+.about-body p{font-family:var(--ff-serif);font-size:16px;line-height:1.9;color:var(--ink3);margin-bottom:20px;font-style:italic}
+.about-body p:last-child{font-family:var(--ff-sans);font-style:normal;font-size:14px;line-height:1.8;color:var(--muted)}
+.about-sig{font-family:var(--ff-display);font-size:52px;font-weight:200;font-style:italic;color:var(--terra);margin:32px 0 24px;line-height:1}
+.btn-solid{display:inline-flex;align-items:center;gap:10px;padding:14px 32px;background:var(--ink);color:var(--white);font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;border-radius:100px;text-decoration:none;transition:all .3s;border:none;cursor:pointer}
+.btn-solid:hover{background:var(--terra);transform:translateY(-2px);box-shadow:0 12px 32px rgba(191,90,47,.25)}
+.btn-ghost{display:inline-flex;align-items:center;gap:10px;padding:13px 31px;background:transparent;color:var(--ink);font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;border-radius:100px;border:1.5px solid rgba(26,18,11,.2);text-decoration:none;transition:all .3s;cursor:pointer}
+.btn-ghost:hover{border-color:var(--terra);color:var(--terra);transform:translateY(-2px)}
+
+/* CATALOG SECTION */
+.catalog{padding:100px 0;background:var(--white)}
+.section-head{margin-bottom:56px}
+.section-title{font-family:var(--ff-display);font-size:64px;font-weight:200;color:var(--ink);line-height:1;letter-spacing:-.02em}
+.section-title em{font-style:italic;color:var(--terra)}
+.cat-nav{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:48px;overflow-x:auto;scrollbar-width:none}
+.cat-btn{padding:14px 26px;font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:all .25s}
+.cat-btn.on{color:var(--terra);border-bottom-color:var(--terra)}
+.cat-btn:hover{color:var(--ink2)}
+.products-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+
+/* PRODUCT CARD */
+.pcard{background:var(--cream);border-radius:10px;overflow:hidden;transition:transform .35s var(--ease-out),box-shadow .35s;cursor:pointer;position:relative}
+.pcard:hover{transform:translateY(-8px);box-shadow:0 24px 64px rgba(26,18,11,.1)}
+.pcard-img{aspect-ratio:1;overflow:hidden;position:relative}
+.pcard-img svg{width:100%;height:100%;display:block;transition:transform .5s var(--ease-out)}
+.pcard:hover .pcard-img svg{transform:scale(1.07)}
+.pcard-quick{position:absolute;inset:0;background:rgba(26,18,11,.45);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s;gap:12px}
+.pcard:hover .pcard-quick{opacity:1}
+.qbtn{width:44px;height:44px;border-radius:50%;background:white;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--ink);transform:translateY(12px);transition:all .3s;font-weight:300}
+.pcard:hover .qbtn{transform:translateY(0)}
+.pcard:hover .qbtn:nth-child(2){transition-delay:.05s}
+.qbtn:hover{background:var(--terra);color:white}
+.pcard-badge{position:absolute;top:12px;left:12px;font-size:9px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;padding:4px 10px;border-radius:100px}
+.badge-new{background:var(--terra);color:white}
+.badge-best{background:var(--gold);color:white}
+.badge-sale{background:var(--sage);color:white}
+.badge-gf{background:var(--sage2);color:white}
+.badge-vegan{background:#7CAB7C;color:white}
+.pcard-body{padding:18px 20px 20px}
+.pcard-cat{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.pcard-name{font-family:var(--ff-display);font-size:22px;font-weight:400;color:var(--ink);margin-bottom:6px;line-height:1.15}
+.pcard-alt{font-size:11px;color:var(--terra);font-style:italic;font-family:var(--ff-serif);margin-bottom:8px}
+.pcard-desc{font-size:12px;line-height:1.7;color:var(--muted);margin-bottom:14px;font-weight:300}
+.pcard-allergens{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:14px}
+.allergen-tag{font-size:9px;letter-spacing:.08em;padding:2px 8px;border-radius:100px;background:rgba(26,18,11,.06);color:var(--ink3);font-weight:500}
+.pcard-foot{display:flex;align-items:center;justify-content:space-between}
+.pcard-price{font-family:var(--ff-display);font-size:24px;font-weight:400;color:var(--terra)}
+.add-to-cart{width:40px;height:40px;border-radius:50%;background:var(--ink);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:white;font-size:18px;transition:all .25s;flex-shrink:0;font-weight:200}
+.add-to-cart:hover{background:var(--terra);transform:scale(1.12)}
+.add-to-cart.added{background:var(--sage);animation:addPop .4s var(--ease-out)}
+@keyframes addPop{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+
+/* SPECIALS — dark editorial */
+.specials{padding:100px 0;background:var(--ink)}
+.specials .section-kicker{color:var(--gold)}
+.specials .section-kicker::before{background:var(--gold)}
+.specials .section-title{color:var(--cream)}
+.specials .section-title em{color:var(--gold)}
+.specials-layout{display:grid;grid-template-columns:1.6fr 1fr 1fr;grid-template-rows:auto auto;gap:4px;margin-top:48px}
+.sc{position:relative;overflow:hidden;cursor:pointer;border-radius:4px}
+.sc:first-child{grid-row:1/3}
+.sc-bg{width:100%;height:100%;min-height:200px;display:block}
+.sc:first-child .sc-bg{min-height:500px}
+.sc-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,6,2,.8) 0%,rgba(10,6,2,.1) 55%,transparent 100%);transition:opacity .3s}
+.sc:hover .sc-overlay{opacity:.6}
+.sc-info{position:absolute;bottom:0;left:0;right:0;padding:28px;transform:translateY(8px);transition:transform .3s var(--ease-out)}
+.sc:hover .sc-info{transform:translateY(0)}
+.sc-tag{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;display:block}
+.sc-name{font-family:var(--ff-display);font-size:28px;font-weight:200;color:white;font-style:italic;line-height:1.1;margin-bottom:6px}
+.sc-price{font-family:var(--ff-display);font-size:18px;color:rgba(255,255,255,.65)}
+.sc-cta{display:inline-flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-top:10px;opacity:0;transform:translateX(-8px);transition:all .3s .05s}
+.sc:hover .sc-cta{opacity:1;transform:translateX(0)}
+
+/* REGIONAL SECTION */
+.regional{padding:100px 0;background:var(--cream2)}
+.regional-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;margin-top:48px}
+.rc{background:var(--white);border-radius:12px;padding:28px 24px;text-align:center;transition:transform .3s,box-shadow .3s;cursor:default;position:relative;overflow:hidden}
+.rc::before{content:'';position:absolute;inset:0;background:var(--terra);transform:scaleY(0);transform-origin:bottom;transition:transform .4s var(--ease-out);z-index:0}
+.rc:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(26,18,11,.12)}
+.rc:hover::before{transform:scaleY(1)}
+.rc>*{position:relative;z-index:1}
+.rc:hover .rc-icon,.rc:hover .rc-title,.rc:hover .rc-items{color:white!important}
+.rc:hover .rc-item-tag{background:rgba(255,255,255,.2);color:rgba(255,255,255,.9)}
+.rc-icon{font-size:36px;display:block;margin-bottom:16px;transition:color .3s}
+.rc-region{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;font-weight:500;transition:color .3s}
+.rc:hover .rc-region{color:rgba(255,255,255,.6)}
+.rc-title{font-family:var(--ff-display);font-size:20px;font-weight:400;color:var(--ink);margin-bottom:16px;font-style:italic;transition:color .3s}
+.rc-items{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.rc-item-tag{font-size:10px;padding:3px 10px;border-radius:100px;background:rgba(26,18,11,.07);color:var(--ink3);font-weight:400;transition:all .3s}
+
+/* AI ASSISTANT */
+.ai-section{padding:80px 0;background:var(--ink2)}
+.ai-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:48px;max-width:900px;margin:0 auto;text-align:center}
+.ai-title{font-family:var(--ff-display);font-size:48px;font-weight:200;color:var(--cream);font-style:italic;margin-bottom:12px}
+.ai-sub{font-size:14px;color:rgba(255,255,255,.5);margin-bottom:40px;font-weight:300;line-height:1.7}
+.ai-input-row{display:flex;gap:0;max-width:640px;margin:0 auto 16px}
+.ai-input{flex:1;padding:16px 24px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-right:none;border-radius:100px 0 0 100px;color:white;font-family:var(--ff-sans);font-size:14px;outline:none;transition:border-color .2s}
+.ai-input::placeholder{color:rgba(255,255,255,.35)}
+.ai-input:focus{border-color:rgba(191,90,47,.6);background:rgba(255,255,255,.09)}
+.ai-btn{padding:16px 28px;background:var(--terra);color:white;border:none;border-radius:0 100px 100px 0;font-family:var(--ff-sans);font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:background .2s;white-space:nowrap}
+.ai-btn:hover{background:var(--terra2)}
+.ai-btn:disabled{background:rgba(255,255,255,.15);cursor:wait}
+.ai-resp{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:28px 32px;margin-top:24px;text-align:left;min-height:80px;display:none}
+.ai-resp-text{font-size:14px;line-height:1.85;color:rgba(255,255,255,.75);font-weight:300}
+.ai-resp-text strong{color:var(--terra3);font-weight:500}
+.ai-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:20px}
+.ai-chip{padding:7px 18px;border:1px solid rgba(255,255,255,.15);border-radius:100px;font-size:11px;color:rgba(255,255,255,.5);cursor:pointer;transition:all .2s}
+.ai-chip:hover{border-color:var(--terra);color:var(--terra3);background:rgba(191,90,47,.1)}
+.ai-thinking{display:flex;gap:6px;align-items:center;justify-content:center;padding:12px}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:var(--terra);animation:blink 1.4s ease-in-out infinite}
+.ai-dot:nth-child(2){animation-delay:.2s}
+.ai-dot:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
+
+/* PROCESS */
+.process{padding:100px 0;background:var(--white)}
+.process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:48px;position:relative}
+.ps{padding:48px 36px;background:var(--cream);position:relative;overflow:hidden;transition:background .3s}
+.ps:hover{background:var(--terra)}
+.ps::before{content:'';position:absolute;top:0;right:0;bottom:0;width:1px;background:var(--border)}
+.ps-num{font-family:var(--ff-display);font-size:80px;font-weight:200;color:rgba(191,90,47,.1);position:absolute;top:20px;right:20px;line-height:1;transition:color .3s}
+.ps:hover .ps-num{color:rgba(255,255,255,.15)}
+.ps-icon{width:52px;height:52px;border-radius:50%;background:rgba(191,90,47,.1);display:flex;align-items:center;justify-content:center;margin-bottom:24px;transition:background .3s}
+.ps:hover .ps-icon{background:rgba(255,255,255,.15)}
+.ps-icon svg{width:22px;height:22px;stroke:var(--terra);transition:stroke .3s}
+.ps:hover .ps-icon svg{stroke:white}
+.ps-title{font-family:var(--ff-display);font-size:24px;font-weight:400;color:var(--ink);margin-bottom:12px;font-style:italic;transition:color .3s}
+.ps:hover .ps-title{color:white}
+.ps-text{font-size:13px;line-height:1.75;color:var(--muted);font-weight:300;transition:color .3s}
+.ps:hover .ps-text{color:rgba(255,255,255,.7)}
+
+/* TESTIMONIALS */
+.testimonials{padding:100px 0;background:var(--cream)}
+.t-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:56px}
+.tc{padding:36px;background:var(--white);border-radius:12px;position:relative;transition:transform .3s,box-shadow .3s}
+.tc:hover{transform:translateY(-6px);box-shadow:0 20px 56px rgba(26,18,11,.08)}
+.tc-quote{font-size:72px;line-height:.5;font-family:var(--ff-display);color:var(--terra);opacity:.2;position:absolute;top:24px;right:28px}
+.tc-stars{display:flex;gap:3px;margin-bottom:18px}
+.star{color:var(--gold);font-size:13px}
+.tc-text{font-family:var(--ff-serif);font-size:15px;line-height:1.8;color:var(--ink2);margin-bottom:24px;font-style:italic;font-weight:400}
+.tc-author{display:flex;align-items:center;gap:14px}
+.tc-avatar{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--terra3),var(--terra));display:flex;align-items:center;justify-content:center;font-family:var(--ff-display);font-size:18px;color:white;font-weight:400;flex-shrink:0}
+.tc-name{font-weight:500;font-size:14px;color:var(--ink);font-family:var(--ff-sans)}
+.tc-sub{font-size:11px;color:var(--muted);margin-top:2px;font-style:italic}
+
+/* SUBSCRIBE */
+.subscribe{padding:80px 0;background:var(--terra);text-align:center;position:relative;overflow:hidden}
+.subscribe::before{content:'';position:absolute;top:-100px;left:-100px;width:400px;height:400px;border-radius:50%;background:rgba(255,255,255,.05);pointer-events:none}
+.subscribe::after{content:'';position:absolute;bottom:-80px;right:-80px;width:320px;height:320px;border-radius:50%;background:rgba(0,0,0,.05);pointer-events:none}
+.sub-title{font-family:var(--ff-display);font-size:52px;font-weight:200;color:white;margin-bottom:12px;position:relative}
+.sub-sub{font-size:15px;color:rgba(255,255,255,.7);margin-bottom:40px;font-weight:300;position:relative}
+.sub-form{display:flex;justify-content:center;position:relative}
+.sub-input{width:300px;padding:15px 24px;border:1.5px solid rgba(255,255,255,.4);border-right:none;background:rgba(255,255,255,.1);color:white;font-family:var(--ff-sans);font-size:14px;outline:none;border-radius:100px 0 0 100px;transition:border-color .2s}
+.sub-input::placeholder{color:rgba(255,255,255,.45)}
+.sub-input:focus{border-color:rgba(255,255,255,.8);background:rgba(255,255,255,.18)}
+.sub-btn{padding:15px 28px;background:white;color:var(--terra);font-family:var(--ff-sans);font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;border:none;border-radius:0 100px 100px 0;cursor:pointer;transition:all .2s;white-space:nowrap}
+.sub-btn:hover{background:var(--cream);transform:none}
+
+/* CONTACT STRIP */
+.contact{padding:70px 0;background:var(--cream2)}
+.contact-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(26,18,11,.08);border-radius:12px;overflow:hidden;border:1px solid rgba(26,18,11,.08)}
+.cg-cell{background:var(--cream2);padding:36px 28px;display:flex;gap:18px}
+.cg-icon{width:48px;height:48px;border-radius:12px;background:rgba(191,90,47,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cg-icon svg{width:20px;height:20px;stroke:var(--terra);fill:none}
+.cg-title{font-family:var(--ff-display);font-size:18px;font-weight:400;color:var(--ink);margin-bottom:8px;font-style:italic}
+.cg-text{font-size:13px;line-height:1.7;color:var(--muted);font-weight:300}
+
+/* GALLERY */
+.gallery{padding:100px 0;background:var(--white)}
+.gallery-grid{display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:220px 220px;gap:6px;margin-top:48px}
+.gi{overflow:hidden;border-radius:6px;cursor:pointer;position:relative}
+.gi:nth-child(1){grid-column:1/5;grid-row:1/3}
+.gi:nth-child(2){grid-column:5/8}
+.gi:nth-child(3){grid-column:8/10}
+.gi:nth-child(4){grid-column:10/13}
+.gi:nth-child(5){grid-column:5/9;grid-row:2}
+.gi:nth-child(6){grid-column:9/13;grid-row:2}
+.gi svg{width:100%;height:100%;display:block;transition:transform .6s var(--ease-out)}
+.gi:hover svg{transform:scale(1.08)}
+.gi-overlay{position:absolute;inset:0;background:rgba(26,18,11,0);transition:background .3s;display:flex;align-items:center;justify-content:center}
+.gi:hover .gi-overlay{background:rgba(26,18,11,.25)}
+.gi-plus{color:white;font-size:32px;font-weight:200;opacity:0;transform:scale(.6);transition:all .3s}
+.gi:hover .gi-plus{opacity:1;transform:scale(1)}
+
+/* FOOTER */
+footer{background:var(--ink);padding:80px 0 40px}
+.footer-grid{display:grid;grid-template-columns:2.2fr 1fr 1fr 1.4fr;gap:64px;margin-bottom:64px}
+.f-logo{font-family:var(--ff-display);font-size:36px;font-weight:200;color:var(--cream);display:block;margin-bottom:16px}
+.f-logo em{font-style:italic;color:var(--terra2)}
+.f-desc{font-size:13px;line-height:1.8;color:rgba(250,245,236,.4);max-width:260px;margin-bottom:28px;font-weight:300}
+.f-socials{display:flex;gap:10px}
+.f-social{width:38px;height:38px;border-radius:50%;border:1px solid rgba(250,245,236,.12);display:flex;align-items:center;justify-content:center;color:rgba(250,245,236,.4);font-size:12px;text-decoration:none;transition:all .2s}
+.f-social:hover{border-color:var(--gold);color:var(--gold)}
+.f-col-h{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(250,245,236,.3);margin-bottom:20px;font-weight:500}
+.f-links{list-style:none}
+.f-links li{margin-bottom:10px}
+.f-links a{font-size:13px;color:rgba(250,245,236,.5);text-decoration:none;transition:color .2s;font-weight:300}
+.f-links a:hover{color:var(--gold)}
+.f-hours-row{display:flex;justify-content:space-between;margin-bottom:10px;font-size:12px}
+.f-hours-day{color:rgba(250,245,236,.3)}
+.f-hours-time{color:rgba(250,245,236,.55)}
+.f-bottom{border-top:1px solid rgba(250,245,236,.07);padding-top:32px;display:flex;justify-content:space-between;font-size:11px;color:rgba(250,245,236,.25)}
+.f-bottom a{color:rgba(250,245,236,.25);text-decoration:none}
+.f-bottom a:hover{color:var(--gold)}
+
+/* CART */
+.cart-backdrop{position:fixed;inset:0;background:rgba(10,6,2,.6);z-index:600;opacity:0;pointer-events:none;transition:opacity .35s;backdrop-filter:blur(4px)}
+.cart-backdrop.on{opacity:1;pointer-events:all}
+.cart-panel{position:fixed;top:0;right:0;bottom:0;width:420px;background:var(--white);z-index:601;transform:translateX(100%);transition:transform .4s var(--ease-out);display:flex;flex-direction:column}
+.cart-panel.on{transform:translateX(0)}
+.cart-head{padding:28px 32px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.cart-title{font-family:var(--ff-display);font-size:26px;font-weight:200;color:var(--ink);font-style:italic}
+.cart-x{background:none;border:none;cursor:pointer;color:var(--muted);font-size:22px;line-height:1;transition:color .2s}
+.cart-x:hover{color:var(--ink)}
+.cart-scroll{flex:1;overflow-y:auto;padding:20px 32px}
+.cart-empty{text-align:center;padding:60px 20px;font-family:var(--ff-display);font-size:22px;color:var(--muted);font-style:italic}
+.ci{display:flex;align-items:center;gap:16px;padding:18px 0;border-bottom:1px solid var(--border)}
+.ci-img{width:68px;height:68px;border-radius:8px;overflow:hidden;flex-shrink:0;background:var(--cream)}
+.ci-img svg{width:100%;height:100%}
+.ci-name{font-family:var(--ff-display);font-size:17px;color:var(--ink);margin-bottom:4px;font-weight:400}
+.ci-price{font-family:var(--ff-display);font-size:15px;color:var(--terra)}
+.ci-qty{display:flex;align-items:center;gap:10px;margin-left:auto;flex-shrink:0}
+.q-btn{width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--ink3);transition:all .2s}
+.q-btn:hover{background:var(--terra);color:white;border-color:var(--terra)}
+.q-val{font-size:14px;font-weight:500;color:var(--ink);min-width:20px;text-align:center}
+.cart-foot{padding:24px 32px;border-top:1px solid var(--border);background:var(--cream)}
+.cart-total-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px}
+.cart-total-l{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.cart-total-v{font-family:var(--ff-display);font-size:30px;font-weight:200;color:var(--ink)}
+.btn-checkout{width:100%;padding:15px;background:var(--terra);color:white;border:none;border-radius:100px;font-family:var(--ff-sans);font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:background .3s}
+.btn-checkout:hover{background:var(--terra2)}
+.cart-hint{text-align:center;font-size:11px;color:var(--muted);margin-top:12px}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;right:28px;background:var(--ink);color:var(--cream);padding:13px 22px;border-radius:100px;font-size:13px;display:flex;align-items:center;gap:10px;transform:translateY(70px);opacity:0;transition:all .35s var(--ease-out);z-index:700;font-weight:300}
+.toast.on{transform:translateY(0);opacity:1}
+.toast-check{width:18px;height:18px;border-radius:50%;background:var(--sage);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+
+/* UTILITIES */
+.container{max-width:1280px;margin:0 auto;padding:0 48px}
+.row-flex{display:flex;align-items:flex-end;justify-content:space-between;gap:40px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes heroImg{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease-out),transform .7s var(--ease-out)}
+.reveal.in{opacity:1;transform:translateY(0)}
+
+@media(max-width:1024px){
+  .hero{grid-template-columns:1fr;min-height:auto}
+  .hero-h1{font-size:64px}
+  .hero-right{display:none}
+  .products-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:40px}
+}
+@media(max-width:768px){
+  .container{padding:0 20px}
+  .nav-center{display:none}
+  .hero-h1{font-size:48px}
+  .about-grid,.specials-layout,.regional-grid,.t-grid,.process-grid{grid-template-columns:1fr}
+  .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  .gi{grid-column:auto!important;grid-row:auto!important}
+  .contact-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#" class="logo">La <em>Miche</em></a>
+    <ul class="nav-center">
+      <li><a href="#catalog">Menu</a></li>
+      <li><a href="#specials">Specials</a></li>
+      <li><a href="#regional">World Breads</a></li>
+      <li><a href="#about">Story</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#contact">Visit</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="cart-pill" onclick="toggleCart()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        Basket
+        <span class="cart-pill-count" id="cart-count">0</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <canvas class="hero-canvas" id="heroCanvas"></canvas>
+  <div class="hero-left">
+    <div class="hero-kicker"><span class="hero-kicker-line"></span><span class="hero-kicker-text">Artisan Bakery · Bengaluru · Est. 1987</span></div>
+    <h1 class="hero-h1">Baked<br>with <em>Soul,</em><br>Served<br>with Love</h1>
+    <p class="hero-sub">Every loaf, pastry and tart is crafted at dawn using heirloom grains, local butter, and decades of unbroken technique. Taste the difference tradition makes.</p>
+    <div class="hero-btns">
+      <a href="#catalog" class="btn-hero btn-hero-fill">
+        Order Now
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#about" class="btn-hero btn-hero-ghost">Our Story</a>
+    </div>
+    <div class="hero-stats-row">
+      <div><span class="hero-stat-n">37+</span><span class="hero-stat-l">Years Baking</span></div>
+      <div><span class="hero-stat-n">80+</span><span class="hero-stat-l">Daily Items</span></div>
+      <div><span class="hero-stat-n">12K</span><span class="hero-stat-l">Happy Regulars</span></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-visual">
+      <div class="hero-img-main" id="heroMainImg"></div>
+      <div class="hero-img-float" id="heroFloatImg"></div>
+      <div class="hero-badge-wrap">
+        <div class="hero-badge">
+          <span class="hero-badge-n">4.9★</span>
+          <span class="hero-badge-s">1,200+ reviews</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker"><div class="ticker-track" id="ticker-track"></div></div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-watermark">Heritage</div>
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-media reveal">
+        <div class="about-media-frame">
+          <div class="about-corner-decor"></div>
+          <div class="about-img-tall" id="aboutMain"></div>
+          <div class="about-img-accent" id="aboutAccent"></div>
+        </div>
+      </div>
+      <div class="about-text reveal">
+        <span class="section-kicker">Our Heritage</span>
+        <h2 class="about-title">Flour, Water,<br>Salt & <em>Time</em></h2>
+        <div class="about-body">
+          <p>In 1987, Marie Delacroix set up her first wood-fired oven in a tiny Pondicherry kitchen. Three decades on, La Miche is still family-run — and still using Marie's original sourdough starter, lovingly fed every morning.</p>
+          <p>We source heirloom grain flours from small Indian mills, churn our own cultured butter, and let slow fermentation do the heavy lifting. No shortcuts, no additives, no compromises — ever.</p>
+        </div>
+        <div class="about-sig">La Miche</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap">
+          <a href="#catalog" class="btn-solid">Explore Our Menu →</a>
+          <a href="#process" class="btn-ghost">How We Bake</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATALOG -->
+<section class="catalog" id="catalog">
+  <div class="container">
+    <div class="row-flex section-head">
+      <div>
+        <span class="section-kicker">Fresh Daily</span>
+        <h2 class="section-title" style="margin-top:12px">Our <em>Baked</em><br>Creations</h2>
+      </div>
+      <a href="#" class="btn-ghost">Full Menu →</a>
+    </div>
+    <div class="cat-nav" id="catNav"></div>
+    <div class="products-grid" id="productsGrid"></div>
+  </div>
+</section>
+
+<!-- SPECIALS -->
+<section class="specials" id="specials">
+  <div class="container">
+    <div class="row-flex">
+      <div>
+        <span class="section-kicker">Limited Edition</span>
+        <h2 class="section-title reveal" style="margin-top:12px">Today's <em>Specials</em></h2>
+      </div>
+      <a href="#" class="btn-ghost" style="border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.6)" onmouseover="this.style.color='var(--gold2)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,.6)';this.style.borderColor='rgba(255,255,255,.2)'">See All →</a>
+    </div>
+    <div class="specials-layout" id="specialsLayout"></div>
+  </div>
+</section>
+
+<!-- REGIONAL -->
+<section class="regional" id="regional">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:14px"><span class="section-kicker" style="justify-content:center">From Every Corner</span></div>
+    <h2 class="section-title" style="text-align:center">World <em>Breads</em> & Specialties</h2>
+    <div class="regional-grid" id="regionalGrid"></div>
+  </div>
+</section>
+
+<!-- AI ASSISTANT -->
+<section class="ai-section" id="ai">
+  <div class="container">
+    <div class="ai-card">
+      <h2 class="ai-title">Ask Our Bakery AI</h2>
+      <p class="ai-sub">Ask anything about our menu, allergens, recommendations, or baking craft.<br>Powered by Claude AI — real answers in real time.</p>
+      <div class="ai-input-row">
+        <input class="ai-input" id="aiInput" placeholder="e.g. What's gluten-free? Recommend a pastry for a birthday…" onkeydown="if(event.key==='Enter')askAI()">
+        <button class="ai-btn" id="aiBtn" onclick="askAI()">Ask →</button>
+      </div>
+      <div class="ai-chips" id="aiChips"></div>
+      <div class="ai-resp" id="aiResp">
+        <div class="ai-thinking" id="aiThinking" style="display:none">
+          <div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div>
+        </div>
+        <div class="ai-resp-text" id="aiText"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="process">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:14px"><span class="section-kicker" style="justify-content:center">How We Bake</span></div>
+    <h2 class="section-title" style="text-align:center">From <em>Grain</em> to Table</h2>
+    <div class="process-grid" id="processGrid"></div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:14px"><span class="section-kicker" style="justify-content:center">Our Guests</span></div>
+    <h2 class="section-title" style="text-align:center">Loved by <em>Thousands</em></h2>
+    <div class="t-grid" id="tGrid"></div>
+  </div>
+</section>
+
+<!-- SUBSCRIBE -->
+<section class="subscribe">
+  <h2 class="sub-title">Stay Fresh</h2>
+  <p class="sub-sub">Weekly specials, new creations, and baking stories — no spam, ever.</p>
+  <div class="sub-form">
+    <input class="sub-input" id="subInput" type="email" placeholder="your@email.com">
+    <button class="sub-btn" onclick="doSubscribe()">Subscribe</button>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="cg-cell">
+        <div class="cg-icon"><svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div><h4 class="cg-title">Opening Hours</h4><p class="cg-text">Mon – Fri &nbsp;6:30 am – 7 pm<br>Saturday &nbsp;7 am – 5 pm<br>Sunday &nbsp;8 am – 2 pm</p></div>
+      </div>
+      <div class="cg-cell">
+        <div class="cg-icon"><svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div><h4 class="cg-title">Find Us</h4><p class="cg-text">14, Gandhi Bazaar Cross<br>Basavanagudi, Bengaluru 560004<br>Karnataka, India</p></div>
+      </div>
+      <div class="cg-cell">
+        <div class="cg-icon"><svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2A19.79 19.79 0 013.08 5.18 2 2 0 015.07 3h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L9.91 10a16 16 0 006.08 6.09l.42-.42a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 17z"/></svg></div>
+        <div><h4 class="cg-title">Reach Us</h4><p class="cg-text">+91 80 2345 6789<br>orders@lamiche.in<br>WhatsApp orders welcome</p></div>
+      </div>
+      <div class="cg-cell">
+        <div class="cg-icon"><svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4a1 1 0 011 1v8a1 1 0 01-1 1h-4m0-10v10"/><circle cx="19" cy="18" r="1"/></svg></div>
+        <div><h4 class="cg-title">Delivery</h4><p class="cg-text">Free delivery above ₹600<br>Same-day cutoff at 11 am<br>Pre-order up to 7 days ahead</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery" id="gallery">
+  <div class="container">
+    <div class="row-flex">
+      <div><span class="section-kicker">From Our Kitchen</span><h2 class="section-title reveal" style="margin-top:12px">Visual <em>Feast</em></h2></div>
+      <a href="#" style="color:var(--terra);font-size:12px;text-decoration:none;letter-spacing:.1em;font-weight:500;text-transform:uppercase">@lamiche.in →</a>
+    </div>
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <span class="f-logo">La <em>Miche</em></span>
+        <p class="f-desc">Artisan breads, pastries and confections baked at dawn using heritage grains and 37 years of unbroken craft. Bengaluru's beloved bakery since 1987.</p>
+        <div class="f-socials">
+          <a href="#" class="f-social">in</a>
+          <a href="#" class="f-social">ig</a>
+          <a href="#" class="f-social">fb</a>
+          <a href="#" class="f-social">yt</a>
+        </div>
+      </div>
+      <div>
+        <h5 class="f-col-h">Shop</h5>
+        <ul class="f-links">
+          <li><a href="#">Full Menu</a></li><li><a href="#">Order Online</a></li>
+          <li><a href="#">Gift Cards</a></li><li><a href="#">Subscriptions</a></li>
+          <li><a href="#">Corporate Orders</a></li><li><a href="#">Custom Cakes</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="f-col-h">About</h5>
+        <ul class="f-links">
+          <li><a href="#">Our Story</a></li><li><a href="#">The Bakers</a></li>
+          <li><a href="#">Ingredients</a></li><li><a href="#">Press & Awards</a></li>
+          <li><a href="#">Careers</a></li><li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="f-col-h">Hours</h5>
+        <div class="f-hours-row"><span class="f-hours-day">Mon – Fri</span><span class="f-hours-time">6:30 am – 7 pm</span></div>
+        <div class="f-hours-row"><span class="f-hours-day">Saturday</span><span class="f-hours-time">7 am – 5 pm</span></div>
+        <div class="f-hours-row"><span class="f-hours-day">Sunday</span><span class="f-hours-time">8 am – 2 pm</span></div>
+        <div style="margin-top:24px;padding:16px;background:rgba(250,245,236,.04);border-radius:8px;border:1px solid rgba(250,245,236,.06)">
+          <p style="font-size:11px;color:rgba(250,245,236,.3);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px">Address</p>
+          <p style="font-size:12px;color:rgba(250,245,236,.5);line-height:1.7;font-weight:300">14 Gandhi Bazaar Cross<br>Basavanagudi, Bengaluru 560004</p>
+        </div>
+      </div>
+    </div>
+    <div class="f-bottom">
+      <p>© 2026 La Miche Artisan Bakery. All rights reserved.</p>
+      <div style="display:flex;gap:24px">
+        <a href="#">Privacy Policy</a><a href="#">Terms of Use</a><a href="#">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- CART -->
+<div class="cart-backdrop" id="cartBackdrop" onclick="toggleCart()"></div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-head">
+    <h2 class="cart-title">Your Basket</h2>
+    <button class="cart-x" onclick="toggleCart()">×</button>
+  </div>
+  <div class="cart-scroll" id="cartBody"></div>
+  <div id="cartFoot" style="display:none">
+    <div class="cart-foot">
+      <div class="cart-total-row">
+        <span class="cart-total-l">Total</span>
+        <span class="cart-total-v" id="cartTotal">₹0</span>
+      </div>
+      <button class="btn-checkout" onclick="checkout()">Proceed to Checkout →</button>
+      <p class="cart-hint">Free delivery on orders above ₹600</p>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="toast-check">✓</span>
+  <span id="toastMsg">Added to basket!</span>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// DATA — Full catalog from research report
+// ═══════════════════════════════════════════════════════════════════
+const PRODUCTS = [
+  // Artisan Bread
+  {id:1,name:'Country Sourdough',alt:'',cat:'Artisan Bread',price:280,desc:'Wild-yeast starter, 36-hr cold ferment, tangy crumb and crackly crust',allergens:['Gluten'],badge:'bestseller',clr:['#BF5A2F','#7A3018','#F0D8C0']},
+  {id:2,name:'Multigrain Loaf',alt:'',cat:'Artisan Bread',price:260,desc:'Oat, flax, sunflower and sesame — dense, nutty and fibre-rich',allergens:['Gluten','Seeds'],badge:'',clr:['#6B4A36','#3D2B1F','#D4B896']},
+  {id:3,name:'Dark Rye Sourdough',alt:'Roggenbrot',cat:'Artisan Bread',price:260,desc:'80% rye with caraway seeds, deeply sour and earthy',allergens:['Gluten'],badge:'',clr:['#4A3828','#2A1E12','#B89A78']},
+  {id:4,name:'Rosemary Focaccia',alt:'',cat:'Artisan Bread',price:200,desc:'Ligurian olive oil, coarse sea salt, fresh rosemary — airy and light',allergens:['Gluten'],badge:'',clr:['#7A8C5A','#3D5030','#D0E0B8']},
+  {id:5,name:'Ciabatta',alt:'',cat:'Artisan Bread',price:180,desc:'Italian crusty white bread with enormous holes and enviable chew',allergens:['Gluten'],badge:'',clr:['#C8962A','#8A6010','#FDECC0']},
+  // Boulangerie
+  {id:6,name:'Classic Baguette',alt:'',cat:'Boulangerie',price:80,desc:'Long, thin loaf with crisp golden crust and feather-light crumb',allergens:['Gluten'],badge:'',clr:['#D4A050','#8A6010','#FFF0D0']},
+  {id:7,name:'Brioche',alt:'',cat:'Boulangerie',price:160,desc:'Light and sweet enriched bread — butter, eggs, golden pillowy crust',allergens:['Gluten','Dairy','Eggs'],badge:'',clr:['#E8BE6A','#A07820','#FFF8E0']},
+  {id:8,name:'Pain de Campagne',alt:'Boule',cat:'Boulangerie',price:220,desc:'Rustic round loaf, mixed wheat/rye, thick crackly crust',allergens:['Gluten'],badge:'',clr:['#A07850','#5A3820','#E8D4B8']},
+  // Viennoiserie
+  {id:9,name:'Croissant au Beurre',alt:'',cat:'Viennoiserie',price:120,desc:'72-layer laminated dough, cultured French-style butter — the classic',allergens:['Gluten','Dairy'],badge:'bestseller',clr:['#E8C078','#C9933A','#FFF3D0']},
+  {id:10,name:'Pain au Chocolat',alt:'Chocolatine',cat:'Viennoiserie',price:130,desc:'Croissant dough filled with two bars of deep Valrhona dark chocolate',allergens:['Gluten','Dairy','Eggs'],badge:'',clr:['#5A3828','#3A2010','#F0D4B0']},
+  {id:11,name:'Kouign-Amann',alt:'',cat:'Viennoiserie',price:190,desc:"Breton pastry: caramelised layers of butter and sugar — Breton for 'butter cake'",allergens:['Gluten','Dairy'],badge:'special',clr:['#BF5A2F','#8A3018','#F8D4A8']},
+  {id:12,name:'Almond Danish',alt:'',cat:'Viennoiserie',price:130,desc:'Flaky viennoiserie, frangipane cream, toasted flaked almonds',allergens:['Gluten','Dairy','Nuts'],badge:'',clr:['#D4A050','#8A6010','#FFF0C8']},
+  // Pâtisserie
+  {id:13,name:'Tarte au Citron',alt:'',cat:'Pâtisserie',price:180,desc:'Sicilian lemon curd in a crisp almond pastry shell, torched meringue',allergens:['Gluten','Dairy','Eggs'],badge:'new',clr:['#E8C840','#A09010','#FFFFE0']},
+  {id:14,name:'Mille-Feuille',alt:'Napoleon',cat:'Pâtisserie',price:200,desc:'Thin puff pastry layers with vanilla pastry cream and fondant icing',allergens:['Gluten','Dairy','Eggs'],badge:'',clr:['#F0D890','#C0A040','#FFFAE8']},
+  {id:15,name:'Éclair au Chocolat',alt:'',cat:'Pâtisserie',price:160,desc:'Oblong choux pastry filled with chocolate cream, dark mirror glaze',allergens:['Gluten','Dairy','Eggs'],badge:'',clr:['#4A2C18','#2A1408','#D4A878']},
+  {id:16,name:'Macaron Assortment',alt:'',cat:'Pâtisserie',price:240,desc:'Almond meringue shells with ganache — rose, pistachio, salted caramel',allergens:['Nuts','Eggs'],badge:'new',clr:['#E8A0B0','#A05070','#FFE8F0']},
+  {id:17,name:'Fruit Tart',alt:'Tarte aux fruits',cat:'Pâtisserie',price:180,desc:'Vanilla cream in a sweet shell, crowned with seasonal fresh fruits',allergens:['Gluten','Dairy','Eggs'],badge:'',clr:['#C8562A','#803018','#F8D4B8']},
+  {id:18,name:'Opéra Cake',alt:'',cat:'Pâtisserie',price:320,desc:'Six layers of joconde biscuit soaked in coffee, with ganache and buttercream',allergens:['Gluten','Dairy','Eggs'],badge:'',clr:['#3D2B1F','#2A2019','#C8A882']},
+  // Cake Shop
+  {id:19,name:'Chocolate Layer Cake',alt:'',cat:'Cake Shop',price:780,desc:'Multi-layer dark chocolate sponge, chocolate ganache frosting',allergens:['Gluten','Dairy','Eggs'],badge:'',clr:['#3A2010','#2A1408','#C09060']},
+  {id:20,name:'Black Forest Gateau',alt:'Forêt-Noire',cat:'Cake Shop',price:860,desc:'Chocolate sponge, Morello cherries, whipped cream, Kirsch',allergens:['Gluten','Dairy','Eggs'],badge:'',clr:['#4A1818','#2A0808','#D4A8A8']},
+  {id:21,name:'Tres Leches',alt:'',cat:'Cake Shop',price:680,desc:'Sponge soaked in three milks — condensed, evaporated, cream',allergens:['Gluten','Dairy','Eggs'],badge:'new',clr:['#F0E0C0','#C0A070','#FFF8E8']},
+  // Gluten-Free / Vegan
+  {id:22,name:'GF Multigrain Bread',alt:'',cat:'Gluten-Free & Vegan',price:300,desc:'Buckwheat, rice flour, millet, seeds — hearty, flavourful, wheat-free',allergens:['Seeds'],badge:'gf',clr:['#8A7A5A','#5A5030','#E8E0C8']},
+  {id:23,name:'Vegan Chocolate Cake',alt:'',cat:'Gluten-Free & Vegan',price:580,desc:'Almond flour, coconut cream frosting — no eggs, no dairy, no compromise',allergens:['Nuts'],badge:'vegan',clr:['#4A3020','#2A1808','#C0A080']},
+  {id:24,name:'GF Brownie',alt:'',cat:'Gluten-Free & Vegan',price:120,desc:'Fudgy black bean and almond flour brownie, dark chocolate',allergens:['Nuts'],badge:'gf',clr:['#3A2010','#201008','#B09060']},
+  // Savory
+  {id:25,name:'Quiche Lorraine',alt:'',cat:'Savory',price:220,desc:'Egg tart with smoked bacon, Gruyère and a short-crust shell',allergens:['Gluten','Dairy','Eggs'],badge:'',clr:['#C8A050','#805020','#F0E0B0']},
+  {id:26,name:'Sausage Roll',alt:'',cat:'Savory',price:140,desc:'Buttery puff pastry around seasoned pork sausage — golden and flaky',allergens:['Gluten','Dairy'],badge:'',clr:['#C06030','#803020','#F0C898']},
+];
+
+const SPECIALS = [
+  {name:'Kouign-Amann',cat:'Weekly Special',price:'₹190',theme:['#2A1810','#BF5A2F'],desc:'Breton caramel-butter pastry'},
+  {name:'Brioche Feuilletée',cat:'Saturday Only',price:'₹160',theme:['#BF5A2F','#3A1808'],desc:'Layered enriched dough'},
+  {name:'Galette des Rois',cat:'Weekend',price:'₹240',theme:['#6B7C5A','#2A3018'],desc:'Frangipane-filled king cake'},
+  {name:'Miso Sourdough',cat:'Chef\'s Special',price:'₹310',theme:['#8A6A2A','#2A2008'],desc:'Umami-rich modern loaf'},
+];
+
+const REGIONAL = [
+  {icon:'🫓',region:'Indian Subcontinent',title:'Indian Breads',items:['Naan','Roti','Bhatura','Pav','Nankhatai','Bakarkhani']},
+  {icon:'🥐',region:'France',title:'Boulangerie',items:['Baguette','Croissant','Brioche','Mille-feuille','Macaron']},
+  {icon:'🥙',region:'Middle East',title:'Levantine',items:['Pita','Manakish','Baklava','Kanafeh','Fatayer']},
+  {icon:'🧆',region:'East Asia',title:'Asian Baked',items:['Baozi','Egg Tart','Mooncake','Pineapple Bun','Melon Pan']},
+  {icon:'🫔',region:'Latin America',title:'Pan & Dulce',items:['Empanada','Concha','Tres Leches','Pan de Muerto','Churros']},
+];
+
+const PROCESS_STEPS = [
+  {n:'01',title:'Source',text:'We partner with heritage grain farmers across Maharashtra and Tamil Nadu, milling fresh every week.',
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`},
+  {n:'02',title:'Mix & Ferment',text:'Long cold fermentation — 18 to 36 hours — develops deep flavour and natural wild-yeast leavening.',
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>`},
+  {n:'03',title:'Shape & Proof',text:'Hand-shaped by our bakers at 4 am, every loaf is given time to rise on its own terms.',
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>`},
+  {n:'04',title:'Fire-Bake',text:'Our stone deck ovens hit 260°C — yielding that unmistakable crackling crust and open, airy crumb.',
+   icon:`<svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round"><path d="M12 2c0 6-8 6-8 12a8 8 0 0016 0c0-6-8-6-8-12z"/></svg>`},
+];
+
+const TESTIMONIALS = [
+  {text:'The sourdough is the finest I have tasted outside of Paris. The crust sings when you tap it.',author:'Priya K.',since:'Customer since 2019',init:'PK'},
+  {text:'We order croissants every Saturday morning. Our family refuses to have any other. It has become a ritual.',author:'Rahul M.',since:'Customer since 2015',init:'RM'},
+  {text:'Catered our whole wedding dessert table. Every guest stopped to ask where the pastries were from.',author:'Ananya S.',since:'Customer since 2021',init:'AS'},
+];
+
+const TICKER_ITEMS = ['Baked Fresh at 4 am','Heirloom Grain Flours','Natural Sourdough Starter','Cultured French Butter','No Preservatives Ever','Slow 36-Hour Fermentation','Wood-Fired Stone Deck','Award-Winning Craft Since 1987'];
+
+const AI_CHIPS = ['What\'s gluten-free?','Best pastry for a birthday?','Allergen information','Today\'s specials','What time do you open?','Vegan options?'];
+
+const CATS = ['All','Artisan Bread','Boulangerie','Viennoiserie','Pâtisserie','Cake Shop','Gluten-Free & Vegan','Savory'];
+
+// ═══════════════════════════════════════════════════════════════════
+// SVG ILLUSTRATION GENERATORS
+// ═══════════════════════════════════════════════════════════════════
+function svgBread(w,h,c1,c2,c3){
+  return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <rect width="${w}" height="${h}" fill="${c3}"/>
+    <ellipse cx="${w*.5}" cy="${h*.68}" rx="${w*.44}" ry="${h*.26}" fill="${c2}"/>
+    <ellipse cx="${w*.5}" cy="${h*.58}" rx="${w*.40}" ry="${h*.23}" fill="${c1}"/>
+    <ellipse cx="${w*.5}" cy="${h*.52}" rx="${w*.35}" ry="${h*.19}" fill="${c2}" opacity=".55"/>
+    <path d="M${w*.25} ${h*.5} Q${w*.5} ${h*.28} ${w*.75} ${h*.5}" fill="none" stroke="${c2}" stroke-width="${w*.015}" opacity=".5" stroke-linecap="round"/>
+    <path d="M${w*.32} ${h*.55} Q${w*.5} ${h*.36} ${w*.68} ${h*.55}" fill="none" stroke="${c2}" stroke-width="${w*.009}" opacity=".35" stroke-linecap="round"/>
+    <ellipse cx="${w*.36}" cy="${h*.58}" rx="${w*.055}" ry="${h*.032}" fill="${c2}" opacity=".45"/>
+    <ellipse cx="${w*.64}" cy="${h*.56}" rx="${w*.045}" ry="${h*.028}" fill="${c2}" opacity=".45"/>
+    <ellipse cx="${w*.5}" cy="${h*.62}" rx="${w*.035}" ry="${h*.022}" fill="${c1}" opacity=".35"/>
+  </svg>`;
+}
+function svgPastry(w,h,c1,c2,c3){
+  return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <rect width="${w}" height="${h}" fill="${c3}"/>
+    ${[0,1,2,3,4].map(i=>{
+      const s=1-i*.06, y=h*(.28+i*.07);
+      return `<path d="M${w*(.5-s*.32)} ${y+h*.38} Q${w*.5} ${y} ${w*(.5+s*.32)} ${y+h*.38} Q${w*.5} ${y+h*.45} ${w*(.5-s*.32)} ${y+h*.38} Z" fill="${i%2===0?c1:c2}" opacity="${.85-i*.08}"/>`;
+    }).join('')}
+    <path d="M${w*.42} ${h*.35} L${w*.48} ${h*.22} L${w*.52} ${h*.22} L${w*.58} ${h*.35}" fill="${c2}" opacity=".7"/>
+    <circle cx="${w*.5}" cy="${h*.21}" r="${w*.035}" fill="${c1}"/>
+    <circle cx="${w*.5}" cy="${h*.21}" r="${w*.018}" fill="white" opacity=".6"/>
+  </svg>`;
+}
+function svgCake(w,h,c1,c2,c3){
+  return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <rect width="${w}" height="${h}" fill="${c3}"/>
+    <rect x="${w*.16}" y="${h*.56}" width="${w*.68}" height="${h*.24}" rx="${w*.02}" fill="${c2}"/>
+    <ellipse cx="${w*.5}" cy="${h*.56}" rx="${w*.34}" ry="${h*.045}" fill="${c1}" opacity=".9"/>
+    <rect x="${w*.2}" y="${h*.38}" width="${w*.60}" height="${h*.2}" rx="${w*.02}" fill="${c1}"/>
+    <ellipse cx="${w*.5}" cy="${h*.38}" rx="${w*.3}" ry="${h*.045}" fill="${c2}" opacity=".85"/>
+    <path d="M${w*.28} ${h*.38} Q${w*.5} ${h*.28} ${w*.72} ${h*.38}" fill="none" stroke="white" stroke-width="${w*.012}" opacity=".35" stroke-linecap="round"/>
+    ${[.38,.48,.58,.62,.42].map((x,i)=>`<circle cx="${w*x}" cy="${h*(.3+i*.02)}" r="${w*.012}" fill="${c1}" opacity=".8"/>`).join('')}
+    <rect x="${w*.48}" y="${h*.15}" width="${w*.013}" height="${h*.14}" fill="${c2}" rx="${w*.005}"/>
+    <ellipse cx="${w*.487}" cy="${h*.15}" rx="${w*.013}" ry="${h*.022}" fill="#FF6030"/>
+  </svg>`;
+}
+function svgGalette(w,h,c1,c2,c3){
+  const cx=w/2,cy=h/2;
+  return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <rect width="${w}" height="${h}" fill="${c3}"/>
+    <circle cx="${cx}" cy="${cy}" r="${w*.40}" fill="${c2}"/>
+    <circle cx="${cx}" cy="${cy}" r="${w*.32}" fill="${c1}"/>
+    <circle cx="${cx}" cy="${cy}" r="${w*.22}" fill="${c2}" opacity=".5"/>
+    <circle cx="${cx}" cy="${cy}" r="${w*.12}" fill="${c1}" opacity=".4"/>
+    ${Array.from({length:8},(_,i)=>{const a=i/8*Math.PI*2,r=w*.36,x=cx+Math.cos(a)*r,y=cy+Math.sin(a)*r;return `<circle cx="${x}" cy="${y}" r="${w*.025}" fill="${c1}" opacity=".7"/>`;}).join('')}
+    ${Array.from({length:12},(_,i)=>{const a=i/12*Math.PI*2,r=w*.30,x=cx+Math.cos(a)*r,y=cy+Math.sin(a)*r;return `<circle cx="${x}" cy="${y}" r="${w*.015}" fill="${c2}" opacity=".5"/>`;}).join('')}
+  </svg>`;
+}
+function svgMacaron(w,h,c1,c2,c3){
+  const cx=w/2,cy=h/2;
+  return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <rect width="${w}" height="${h}" fill="${c3}"/>
+    <ellipse cx="${cx}" cy="${cy-h*.08}" rx="${w*.30}" ry="${h*.15}" fill="${c1}"/>
+    <ellipse cx="${cx}" cy="${cy-h*.07}" rx="${w*.28}" ry="${h*.13}" fill="${c2}" opacity=".5"/>
+    <rect x="${cx-w*.30}" y="${cy-h*.04}" width="${w*.60}" height="${h*.08}" fill="${c2}"/>
+    <ellipse cx="${cx}" cy="${cy+h*.08}" rx="${w*.30}" ry="${h*.15}" fill="${c1}"/>
+    <ellipse cx="${cx}" cy="${cy-h*.08}" rx="${w*.12}" ry="${h*.05}" fill="white" opacity=".18"/>
+  </svg>`;
+}
+function svgEclair(w,h,c1,c2,c3){
+  return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <rect width="${w}" height="${h}" fill="${c3}"/>
+    <rect x="${w*.1}" y="${h*.36}" width="${w*.80}" height="${h*.28}" rx="${h*.14}" fill="${c2}"/>
+    <rect x="${w*.12}" y="${h*.33}" width="${w*.76}" height="${h*.22}" rx="${h*.11}" fill="${c1}"/>
+    <rect x="${w*.14}" y="${h*.3}" width="${w*.72}" height="${h*.16}" rx="${h*.08}" fill="${c2}" opacity=".55"/>
+    <ellipse cx="${w*.3}" cy="${h*.38}" rx="${w*.06}" ry="${h*.04}" fill="white" opacity=".15"/>
+  </svg>`;
+}
+
+function productSVG(p){
+  const [c1,c2,c3]=p.clr;
+  if(p.cat.includes('Bread')||p.cat.includes('Boulangerie')) return svgBread(300,300,c1,c2,c3);
+  if(p.cat.includes('Viennoiserie')||p.cat.includes('Savory')) return svgPastry(300,300,c1,c2,c3);
+  if(p.cat.includes('Cake')) return svgCake(300,300,c1,c2,c3);
+  if(p.name.includes('Macaron')) return svgMacaron(300,300,c1,c2,c3);
+  if(p.name.includes('clair')||p.name.includes('Tarte')) return svgEclair(300,300,c1,c2,c3);
+  return svgGalette(300,300,c1,c2,c3);
+}
+
+function gallerySVG(i){
+  const palettes=[['#BF5A2F','#7A3018','#F0D8C0'],['#E8C078','#C9933A','#FFF3D0'],['#6B7C5A','#3D5030','#D8E8C8'],['#5A3828','#2A1408','#D4A878'],['#D4A050','#8A5020','#F8E8C0'],['#A050A0','#602060','#F0D0F0']];
+  const fns=[svgBread,svgPastry,svgCake,svgGalette,svgMacaron,svgEclair];
+  const p=palettes[i%palettes.length];
+  return fns[i%fns.length](600,480,p[0],p[1],p[2]);
+}
+
+// Hero images
+document.getElementById('heroMainImg').innerHTML=svgBread(400,500,'#BF5A2F','#7A3018','#3D2B1F');
+document.getElementById('heroFloatImg').innerHTML=svgPastry(200,200,'#E8C078','#C9933A','#5A3818');
+
+// About images
+document.getElementById('aboutMain').innerHTML=svgBread(400,500,'#C4622D','#8A3D18','#F0E8DC');
+document.getElementById('aboutAccent').innerHTML=svgCake(300,300,'#D87B4A','#8A3D18','#F0E0D0');
+
+// ═══════════════════════════════════════════════════════════════════
+// TICKER
+// ═══════════════════════════════════════════════════════════════════
+const tt=document.getElementById('ticker-track');
+let th='';
+for(let i=0;i<2;i++) TICKER_ITEMS.forEach(t=>{th+=`<span class="ticker-item"><span class="ticker-gem">◆</span>${t}</span>`;});
+tt.innerHTML=th;
+
+// ═══════════════════════════════════════════════════════════════════
+// CATALOG
+// ═══════════════════════════════════════════════════════════════════
+let activeCat='All';
+const catNav=document.getElementById('catNav');
+CATS.forEach(c=>{
+  const b=document.createElement('button');
+  b.className='cat-btn'+(c===activeCat?' on':'');
+  b.textContent=c;
+  b.onclick=()=>{activeCat=c;document.querySelectorAll('.cat-btn').forEach(x=>x.classList.toggle('on',x.textContent===c));renderProducts();};
+  catNav.appendChild(b);
+});
+
+function badgeHTML(b){
+  if(!b) return '';
+  const map={new:'badge-new New',bestseller:'badge-best Bestseller',special:'badge-new Special',sale:'badge-new Sale',gf:'badge-gf Gluten-Free',vegan:'badge-vegan Vegan'};
+  const parts=(map[b]||'').split(' ');
+  return `<span class="pcard-badge ${parts[0]}">${parts.slice(1).join(' ')}</span>`;
+}
+
+function renderProducts(){
+  const list=activeCat==='All'?PRODUCTS:PRODUCTS.filter(p=>p.cat===activeCat);
+  document.getElementById('productsGrid').innerHTML=list.map(p=>`
+  <div class="pcard" id="pc${p.id}">
+    <div class="pcard-img">
+      ${productSVG(p)}
+      ${badgeHTML(p.badge)}
+      <div class="pcard-quick">
+        <button class="qbtn" onclick="addCart(${p.id})" title="Add to basket">+</button>
+        <button class="qbtn" onclick="openQuick(${p.id})" title="Quick view">👁</button>
+      </div>
+    </div>
+    <div class="pcard-body">
+      <div class="pcard-cat">${p.cat}</div>
+      <h3 class="pcard-name">${p.name}</h3>
+      ${p.alt?`<div class="pcard-alt">${p.alt}</div>`:''}
+      <p class="pcard-desc">${p.desc}</p>
+      <div class="pcard-allergens">${p.allergens.map(a=>`<span class="allergen-tag">${a}</span>`).join('')}</div>
+      <div class="pcard-foot">
+        <span class="pcard-price">₹${p.price}</span>
+        <button class="add-to-cart" onclick="addCart(${p.id})">+</button>
+      </div>
+    </div>
+  </div>`).join('');
+}
+renderProducts();
+
+// ═══════════════════════════════════════════════════════════════════
+// SPECIALS
+// ═══════════════════════════════════════════════════════════════════
+const specPalettes=[
+  ['#BF5A2F','#E8905A'],['#6B4A36','#D87B4A'],
+  ['#5A6A3A','#8AAA5A'],['#8A6A2A','#C8A050']
+];
+document.getElementById('specialsLayout').innerHTML=SPECIALS.map((s,i)=>`
+  <div class="sc">
+    <svg class="sc-bg" viewBox="0 0 600 ${i===0?600:350}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <rect width="600" height="${i===0?600:350}" fill="${specPalettes[i][0]}"/>
+      <circle cx="300" cy="${i===0?300:175}" r="${i===0?220:130}" fill="${specPalettes[i][1]}" opacity=".35"/>
+      <circle cx="300" cy="${i===0?300:175}" r="${i===0?140:85}" fill="${specPalettes[i][1]}" opacity=".2"/>
+      ${i===0?svgBread(600,600,specPalettes[i][1],'rgba(255,255,255,.1)',specPalettes[i][0]).replace('<svg','<g').replace('</svg>','</g>').replace(/viewBox[^"]*"[^"]*"/,'').replace(/xmlns[^"]*"[^"]*"/,'').replace(/preserveAspectRatio[^"]*"[^"]*"/,'').split('<rect')[0]:''}
+    </svg>
+    <div class="sc-overlay"></div>
+    <div class="sc-info">
+      <span class="sc-tag">${s.cat}</span>
+      <div class="sc-name">${s.name}</div>
+      <div class="sc-price">${s.price}</div>
+      <div class="sc-cta">Order this → <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+    </div>
+  </div>`).join('');
+
+// ═══════════════════════════════════════════════════════════════════
+// REGIONAL
+// ═══════════════════════════════════════════════════════════════════
+document.getElementById('regionalGrid').innerHTML=REGIONAL.map(r=>`
+  <div class="rc reveal">
+    <span class="rc-icon">${r.icon}</span>
+    <div class="rc-region">${r.region}</div>
+    <h3 class="rc-title">${r.title}</h3>
+    <div class="rc-items">${r.items.map(it=>`<span class="rc-item-tag">${it}</span>`).join('')}</div>
+  </div>`).join('');
+
+// ═══════════════════════════════════════════════════════════════════
+// AI CHIPS
+// ═══════════════════════════════════════════════════════════════════
+document.getElementById('aiChips').innerHTML=AI_CHIPS.map(c=>`<button class="ai-chip" onclick="document.getElementById('aiInput').value='${c}';askAI()">${c}</button>`).join('');
+
+// ═══════════════════════════════════════════════════════════════════
+// AI ASSISTANT — Anthropic API
+// ═══════════════════════════════════════════════════════════════════
+const MENU_CONTEXT = `You are the AI assistant for La Miche, a premium artisan bakery in Bengaluru, India.
+
+OUR MENU (with prices in ₹):
+ARTISAN BREAD: Country Sourdough ₹280, Multigrain Loaf ₹260, Dark Rye Sourdough ₹260, Rosemary Focaccia ₹200, Ciabatta ₹180
+BOULANGERIE: Classic Baguette ₹80, Brioche ₹160, Pain de Campagne ₹220
+VIENNOISERIE: Croissant au Beurre ₹120, Pain au Chocolat ₹130, Kouign-Amann ₹190, Almond Danish ₹130
+PATISSERIE: Tarte au Citron ₹180, Mille-Feuille ₹200, Éclair au Chocolat ₹160, Macaron Assortment ₹240, Fruit Tart ₹180, Opéra Cake ₹320
+CAKE SHOP: Chocolate Layer Cake ₹780, Black Forest Gateau ₹860, Tres Leches ₹680
+GLUTEN-FREE & VEGAN: GF Multigrain Bread ₹300, Vegan Chocolate Cake ₹580, GF Brownie ₹120
+SAVORY: Quiche Lorraine ₹220, Sausage Roll ₹140
+
+HOURS: Mon-Fri 6:30am-7pm, Sat 7am-5pm, Sun 8am-2pm
+LOCATION: 14 Gandhi Bazaar Cross, Basavanagudi, Bengaluru 560004
+DELIVERY: Free above ₹600. Same-day order cutoff 11am.
+PHONE: +91 80 2345 6789
+
+Answer questions warmly and helpfully. Be concise (2-3 sentences max). Use **bold** for item names and prices. Do NOT make up info not in this context.`;
+
+async function askAI(){
+  const q=document.getElementById('aiInput').value.trim();
+  if(!q) return;
+  const btn=document.getElementById('aiBtn');
+  const resp=document.getElementById('aiResp');
+  const thinking=document.getElementById('aiThinking');
+  const text=document.getElementById('aiText');
+  btn.disabled=true;btn.textContent='...';
+  resp.style.display='block';thinking.style.display='flex';text.textContent='';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:300,
+        system:MENU_CONTEXT,
+        messages:[{role:'user',content:q}]
+      })
+    });
+    const data=await res.json();
+    thinking.style.display='none';
+    const raw=data.content?.[0]?.text||"I'm sorry, I couldn't get a response. Please call us on +91 80 2345 6789!";
+    // Render **bold**
+    text.innerHTML=raw.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+  }catch(e){
+    thinking.style.display='none';
+    text.innerHTML="I'm having trouble connecting right now. Please call us on <strong>+91 80 2345 6789</strong> for assistance!";
+  }
+  btn.disabled=false;btn.textContent='Ask →';
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// PROCESS
+// ═══════════════════════════════════════════════════════════════════
+document.getElementById('processGrid').innerHTML=PROCESS_STEPS.map(s=>`
+  <div class="ps reveal">
+    <span class="ps-num">${s.n}</span>
+    <div class="ps-icon">${s.icon}</div>
+    <h3 class="ps-title">${s.title}</h3>
+    <p class="ps-text">${s.text}</p>
+  </div>`).join('');
+
+// ═══════════════════════════════════════════════════════════════════
+// TESTIMONIALS
+// ═══════════════════════════════════════════════════════════════════
+document.getElementById('tGrid').innerHTML=TESTIMONIALS.map(t=>`
+  <div class="tc reveal">
+    <div class="tc-quote">"</div>
+    <div class="tc-stars">${'<span class="star">★</span>'.repeat(5)}</div>
+    <p class="tc-text">"${t.text}"</p>
+    <div class="tc-author">
+      <div class="tc-avatar">${t.init}</div>
+      <div><div class="tc-name">${t.author}</div><div class="tc-sub">${t.since}</div></div>
+    </div>
+  </div>`).join('');
+
+// ═══════════════════════════════════════════════════════════════════
+// GALLERY
+// ═══════════════════════════════════════════════════════════════════
+document.getElementById('galleryGrid').innerHTML=Array.from({length:6},(_,i)=>`
+  <div class="gi">
+    ${gallerySVG(i)}
+    <div class="gi-overlay"><span class="gi-plus">+</span></div>
+  </div>`).join('');
+
+// ═══════════════════════════════════════════════════════════════════
+// CART
+// ═══════════════════════════════════════════════════════════════════
+let cart={};
+
+function addCart(id){
+  cart[id]=(cart[id]||0)+1;
+  updateCartUI();
+  const p=PRODUCTS.find(x=>x.id===id);
+  showToast(`${p.name} added!`);
+  const btn=document.querySelector(`#pc${id} .add-to-cart`);
+  if(btn){btn.classList.add('added');setTimeout(()=>btn.classList.remove('added'),400);}
+}
+
+function updateCartUI(){
+  const total=Object.values(cart).reduce((a,b)=>a+b,0);
+  const count=document.getElementById('cart-count');
+  count.textContent=total;
+  count.style.display=total>0?'flex':'none';
+  renderCart();
+}
+
+function renderCart(){
+  const entries=Object.entries(cart).filter(([,q])=>q>0);
+  const body=document.getElementById('cartBody');
+  const foot=document.getElementById('cartFoot');
+  if(!entries.length){body.innerHTML='<div class="cart-empty">Your basket is empty…</div>';foot.style.display='none';return;}
+  let tot=0;
+  body.innerHTML=entries.map(([id,qty])=>{
+    const p=PRODUCTS.find(x=>x.id==id);tot+=p.price*qty;
+    return `<div class="ci">
+      <div class="ci-img">${productSVG(p)}</div>
+      <div style="flex:1"><div class="ci-name">${p.name}</div><div class="ci-price">₹${p.price}</div></div>
+      <div class="ci-qty">
+        <button class="q-btn" onclick="chgQty(${id},-1)">−</button>
+        <span class="q-val">${qty}</span>
+        <button class="q-btn" onclick="chgQty(${id},1)">+</button>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('cartTotal').textContent='₹'+tot.toLocaleString('en-IN');
+  foot.style.display='block';
+}
+
+function chgQty(id,d){cart[id]=Math.max(0,(cart[id]||0)+d);updateCartUI();}
+
+function toggleCart(){
+  const on=document.getElementById('cartPanel').classList.toggle('on');
+  document.getElementById('cartBackdrop').classList.toggle('on',on);
+  if(on) renderCart();
+}
+
+function checkout(){showToast('Redirecting to checkout…');setTimeout(toggleCart,800);}
+
+// ═══════════════════════════════════════════════════════════════════
+// SUBSCRIBE
+// ═══════════════════════════════════════════════════════════════════
+function doSubscribe(){
+  const v=document.getElementById('subInput').value;
+  showToast(v.includes('@')?'Thanks! You\'re subscribed.':'Please enter a valid email.');
+  if(v.includes('@')) document.getElementById('subInput').value='';
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════════════════════
+function showToast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  t.classList.add('on');
+  clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.remove('on'),2800);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// CURSOR
+// ═══════════════════════════════════════════════════════════════════
+const cur=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=Math.round(rx)+'px';ring.style.top=Math.round(ry)+'px';requestAnimationFrame(loop);})();
+document.querySelectorAll('a,button,.pcard,.sc,.rc,.gi').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='20px';cur.style.height='20px';ring.style.width='60px';ring.style.height='60px';ring.style.borderColor='rgba(191,90,47,.7)';});
+  el.addEventListener('mouseleave',()=>{cur.style.width='12px';cur.style.height='12px';ring.style.width='40px';ring.style.height='40px';ring.style.borderColor='rgba(191,90,47,.4)';});
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// HERO CANVAS — animated grain background
+// ═══════════════════════════════════════════════════════════════════
+(function initHero(){
+  const canvas=document.getElementById('heroCanvas');
+  const ctx=canvas.getContext('2d');
+  function resize(){canvas.width=canvas.offsetWidth;canvas.height=canvas.offsetHeight;}
+  resize();window.addEventListener('resize',resize);
+  const particles=Array.from({length:60},()=>({
+    x:Math.random()*canvas.width,y:Math.random()*canvas.height,
+    vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,
+    r:Math.random()*2+.5,o:Math.random()*.4+.1
+  }));
+  function frame(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    // Deep warm gradient
+    const g=ctx.createLinearGradient(0,0,canvas.width,canvas.height);
+    g.addColorStop(0,'#1A120B');g.addColorStop(.5,'#2A1810');g.addColorStop(1,'#140C08');
+    ctx.fillStyle=g;ctx.fillRect(0,0,canvas.width,canvas.height);
+    // Radial warm glow
+    const glow=ctx.createRadialGradient(canvas.width*.35,canvas.height*.4,0,canvas.width*.35,canvas.height*.4,canvas.width*.55);
+    glow.addColorStop(0,'rgba(191,90,47,.18)');glow.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=glow;ctx.fillRect(0,0,canvas.width,canvas.height);
+    // Particles
+    particles.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0) p.x=canvas.width;if(p.x>canvas.width) p.x=0;
+      if(p.y<0) p.y=canvas.height;if(p.y>canvas.height) p.y=0;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(200,150,80,${p.o})`;ctx.fill();
+    });
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// ═══════════════════════════════════════════════════════════════════
+// SCROLL EFFECTS
+// ═══════════════════════════════════════════════════════════════════
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{
+  nav.classList.toggle('solid',scrollY>60);
+  document.querySelectorAll('.reveal').forEach(el=>{
+    const r=el.getBoundingClientRect();
+    if(r.top<window.innerHeight*.88) el.classList.add('in');
+  });
+},{passive:true});
+// initial check
+setTimeout(()=>document.querySelectorAll('.reveal').forEach(el=>{const r=el.getBoundingClientRect();if(r.top<window.innerHeight*.88)el.classList.add('in');}),100);
+</script>
+</body>
+</html>
